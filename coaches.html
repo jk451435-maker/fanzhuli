@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-<title>自由教練 — 反作用力訓練空間</title>
+<title>高雄健身教練推薦｜自由教練名單 — 反作用力訓練空間</title>
+<meta name="description" content="反作用力訓練空間｜高雄自由教練名單，涵蓋增肌、減脂、體能、女性專屬等多種專長，直接聯繫教練預約體驗課。">
+<meta name="keywords" content="高雄健身教練,高雄私人教練,高雄自由教練,健身教練推薦,高雄增肌減脂,反作用力訓練空間">
+<meta property="og:title" content="自由教練名單 — 反作用力訓練空間">
+<meta property="og:description" content="高雄自由重量場館，多位專業教練直接聯繫預約，找到最適合你的教練！">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -69,7 +74,7 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 <div class="hero">
   <div class="hero-eyebrow">反作用力訓練空間</div>
   <div class="hero-title">自由<span>教練</span></div>
-  <div class="hero-sub">場館內共有 <strong style="color:#00CFFF">7 位</strong> 專業自由教練，涵蓋增肌、減脂、體能、運動傷害等多種專長。</div>
+  <div class="hero-sub">場館內共有 <strong style="color:#00CFFF" id="coach-count">8 位</strong> 專業自由教練，涵蓋 <strong style="color:#00CFFF" id="tag-count"></strong> 種專長，找到適合你的教練直接預約！</div>
 
   <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
     <div style="display:flex;align-items:center;gap:12px;background:rgba(30,144,255,0.08);border:1px solid rgba(30,144,255,0.2);border-radius:10px;padding:12px 14px">
@@ -116,8 +121,9 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 
 <div class="cta-block">
   <div class="cta-title">不知道選誰？</div>
-  <div class="cta-sub">告訴我們你的需求，我們幫你媒合最適合的教練。</div>
-  <a href="https://lin.ee/Jshdti6" class="cta-btn">到 LINE@ 詢問 →</a>
+  <div class="cta-sub">告訴我們你的訓練目標、時間、預算，我們幫你媒合最適合的教練，免費諮詢！</div>
+  <a href="https://lin.ee/Jshdti6" class="cta-btn">到 LINE@ 免費諮詢 →</a>
+  <div style="margin-top:12px;font-size:12px;color:var(--muted);text-align:center">通常 24 小時內回覆</div>
 </div>
 
 <button id="topBtn" style="position:fixed;bottom:28px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(30,144,255,0.4);z-index:999">↑</button>
@@ -162,6 +168,14 @@ const coaches = [
     tags:[{text:'體能訓練',cls:'tag-orange'},{text:'運動表現',cls:'tag-yellow'},{text:'動作矯正',cls:'tag-cyan'}],
     ig:'https://www.instagram.com/andrew_and_ban',
     emoji:'🏋️',
+    gender:'male'
+  },
+  {
+    name:'KAI',
+    desc:'健身工廠13年老將，從主管再到訓練教官，親手把學員變選手、業界教練。全方位陪伴你戰勝短期挫折，培養長期健身人生。',
+    tags:[{text:'體態雕塑',cls:'tag-cyan'},{text:'運動傷害',cls:'tag-green'},{text:'增肌',cls:'tag-blue'}],
+    ig:'https://www.instagram.com/e61350',
+    emoji:'💪',
     gender:'male'
   },
   {
@@ -237,6 +251,9 @@ function buildTagFilter(){
     opt.textContent = tag;
     select.appendChild(opt);
   });
+  // 動態更新數字
+  document.getElementById('coach-count').textContent = coaches.length + ' 位';
+  document.getElementById('tag-count').textContent = allTags.size;
 }
 
 buildTagFilter();
