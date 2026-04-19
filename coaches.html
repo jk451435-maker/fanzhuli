@@ -33,7 +33,7 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
 /* COACH GRID */
-.coaches{padding:0 20px;display:flex;flex-direction:column;gap:12px}
+.coaches{padding:0 20px;display:flex;flex-direction:column;gap:10px}
 
 .coach-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s}
 .coach-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--cyan));border-radius:3px 0 0 3px}
@@ -116,6 +116,7 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 
 <!-- 教練列表 -->
 <div class="coaches" id="coach-list"></div>
+<div id="pagination"></div>
 
 <div class="divider"></div>
 
@@ -131,7 +132,7 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 <script>
 const coaches = [
   {
-    name:'薇薇 Vivi',
+    name:'Vivi',
     desc:'溫柔鼓勵的方式讓所有人愛上訓練，並且達成自己想要的樣子。',
     tags:[{text:'運動表現',cls:'tag-yellow'},{text:'新手友善',cls:'tag-green'},{text:'多功能訓練',cls:'tag-cyan'}],
     ig:'https://www.instagram.com/vivi_lu_0314',
@@ -197,11 +198,14 @@ const coaches = [
 ];
 
 let currentFilter = 'all';
+let currentGender = 'all';
+let currentPage = 1;
+const perPage = 6;
 
 // 每次開啟隨機排序
 coaches.sort(() => Math.random() - 0.5);
 
-function renderCoaches(filter, gender){
+function renderCoaches(filter, gender, page){
   const list = document.getElementById('coach-list');
   let filtered = coaches;
   if(filter !== 'all') filtered = filtered.filter(c=>c.tags.some(t=>t.text===filter));
@@ -209,35 +213,62 @@ function renderCoaches(filter, gender){
 
   if(filtered.length===0){
     list.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:13px">目前沒有符合條件的教練</div>`;
+    document.getElementById('pagination').innerHTML='';
     return;
   }
 
-  list.innerHTML = filtered.map(c=>`
+  const totalPages = Math.ceil(filtered.length / perPage);
+  const start = (page-1) * perPage;
+  const pageCoaches = filtered.slice(start, start + perPage);
+
+  list.innerHTML = pageCoaches.map((c, i)=>`
     <div class="coach-card">
       <div class="coach-header">
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="font-size:28px;flex-shrink:0">${c.emoji}</div>
+          <div style="font-size:26px;flex-shrink:0">${c.emoji}</div>
           <div>
             <div style="display:flex;align-items:center;gap:6px">
               <div class="coach-name">${c.name}</div>
               <span style="font-size:10px;font-weight:900;padding:2px 7px;border-radius:4px;${c.gender==='female'?'background:rgba(255,105,180,0.15);color:#ff69b4':'background:rgba(30,144,255,0.12);color:#1E90FF'}">${c.gender==='female'?'女':'男'}</span>
             </div>
+            <div class="coach-tags" style="margin-top:4px">
+              ${c.tags.map(t=>`<span class="coach-tag ${t.cls}">${t.text}</span>`).join('')}
+            </div>
           </div>
         </div>
-        <a href="${c.ig}" target="_blank" class="coach-ig">📷 點此 IG 聯繫教練</a>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span style="font-size:10px;font-weight:900;color:var(--muted);background:var(--border);padding:2px 8px;border-radius:99px">#${start+i+1}</span>
+          <a href="${c.ig}" target="_blank" class="coach-ig" style="font-size:11px;padding:5px 10px">📷 點此 IG 聯繫教練</a>
+        </div>
       </div>
-      <div class="coach-desc">${c.desc}</div>
-      <div class="coach-tags">
-        ${c.tags.map(t=>`<span class="coach-tag ${t.cls}">${t.text}</span>`).join('')}
-      </div>
+      <div class="coach-desc" style="margin-top:8px">${c.desc}</div>
     </div>
   `).join('');
+
+  const pagination = document.getElementById('pagination');
+  if(totalPages <= 1){ pagination.innerHTML=''; return; }
+  const prevDisabled = page===1;
+  const nextDisabled = page===totalPages;
+  pagination.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0">
+      <button onclick="changePage(${page-1})" ${prevDisabled?'disabled':''} style="background:${prevDisabled?'var(--border)':'var(--blue)'};color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:900;font-family:'Noto Sans TC',sans-serif;cursor:pointer;opacity:${prevDisabled?'0.4':'1'}">← 上一頁</button>
+      <span style="font-size:13px;color:var(--muted);font-weight:700">${page} / ${totalPages}</span>
+      <button onclick="changePage(${page+1})" ${nextDisabled?'disabled':''} style="background:${nextDisabled?'var(--border)':'var(--blue)'};color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:900;font-family:'Noto Sans TC',sans-serif;cursor:pointer;opacity:${nextDisabled?'0.4':'1'}">下一頁 →</button>
+    </div>
+  `;
+}
+
+function changePage(page){
+  currentPage = page;
+  renderCoaches(currentFilter, currentGender, currentPage);
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function filterCoach(){
-  const tag = document.getElementById('filter-select').value;
-  const gender = document.getElementById('gender-select').value;
-  renderCoaches(tag, gender);
+  currentFilter = document.getElementById('filter-select').value;
+  currentGender = document.getElementById('gender-select').value;
+  currentPage = 1;
+  renderCoaches(currentFilter, currentGender, currentPage);
 }
 
 // 動態生成專長選單（只顯示有教練的專長）
@@ -257,7 +288,7 @@ function buildTagFilter(){
 }
 
 buildTagFilter();
-renderCoaches('all', 'all');
+renderCoaches('all', 'all', 1);
 
 const topBtn=document.getElementById('topBtn');
 window.addEventListener('scroll',()=>{topBtn.style.opacity=window.scrollY>300?'1':'0';topBtn.style.pointerEvents=window.scrollY>300?'auto':'none'});
