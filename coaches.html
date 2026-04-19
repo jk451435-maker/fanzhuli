@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>自由教練 — 反作用力訓練空間</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c12;--surface:#0f1520;--border:#1e2d42;--blue:#1E90FF;--cyan:#00CFFF;--text:#f0f6ff;--muted:#7a95b5;--radius:14px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:15px;line-height:1.6;max-width:480px;width:100%;margin:0 auto;padding-bottom:60px;overflow-x:hidden}
+*{word-break:break-word}
+
+/* HERO */
+.hero{position:relative;padding:48px 24px 32px;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(0,207,255,0.15) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:11px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:2px;line-height:1;color:#fff}
+.hero-title span{color:var(--cyan)}
+.hero-sub{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.7}
+
+/* FILTER */
+.filter-wrap{padding:0 20px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filter-wrap::-webkit-scrollbar{display:none}
+.filter-btn{flex-shrink:0;padding:7px 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:12px;font-weight:700;font-family:'Noto Sans TC',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* COACH GRID */
+.coaches{padding:0 20px;display:flex;flex-direction:column;gap:12px}
+
+.coach-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s}
+.coach-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--cyan));border-radius:3px 0 0 3px}
+
+.coach-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.coach-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:#fff;line-height:1}
+.coach-ig{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px;text-decoration:none;flex-shrink:0}
+
+.coach-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+
+.coach-tags{display:flex;flex-wrap:wrap;gap:5px}
+.coach-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+.tag-blue{background:rgba(30,144,255,0.12);color:#1E90FF}
+.tag-cyan{background:rgba(0,207,255,0.1);color:#00CFFF}
+.tag-orange{background:rgba(255,165,0,0.1);color:#FFA500}
+.tag-green{background:rgba(34,197,94,0.1);color:#22c55e}
+.tag-purple{background:rgba(168,85,247,0.1);color:#a855f7}
+.tag-red{background:rgba(239,68,68,0.1);color:#ef4444}
+.tag-yellow{background:rgba(234,179,8,0.1);color:#eab308}
+
+/* CTA */
+.divider{height:1px;background:var(--border);margin:28px 20px}
+.cta-block{margin:0 20px;background:linear-gradient(135deg,#0a0f1a,#0d1628);border:1px solid rgba(30,144,255,0.25);border-radius:var(--radius);padding:24px;text-align:center}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--blue);margin-bottom:6px}
+.cta-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.cta-btn{display:block;background:var(--blue);color:#fff;font-weight:900;font-size:15px;padding:14px;border-radius:10px;text-decoration:none;letter-spacing:1px;font-family:'Noto Sans TC',sans-serif}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.coach-card{animation:fadeUp 0.4s ease both}
+.coach-card:nth-child(2){animation-delay:0.05s}
+.coach-card:nth-child(3){animation-delay:0.1s}
+.coach-card:nth-child(4){animation-delay:0.15s}
+.coach-card:nth-child(5){animation-delay:0.2s}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">反作用力訓練空間</div>
+  <div class="hero-title">自由<span>教練</span></div>
+  <div class="hero-sub">場館內共有 <strong style="color:#00CFFF">6 位</strong> 專業自由教練，涵蓋增肌、減脂、體能、運動傷害等多種專長。</div>
+
+  <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:12px;background:rgba(30,144,255,0.08);border:1px solid rgba(30,144,255,0.2);border-radius:10px;padding:12px 14px">
+      <div style="font-size:22px;flex-shrink:0">1️⃣</div>
+      <div>
+        <div style="font-size:13px;font-weight:900;color:#fff">選擇你的需求</div>
+        <div style="font-size:12px;color:var(--muted)">用上方選單篩選你想要的訓練專長</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:rgba(30,144,255,0.08);border:1px solid rgba(30,144,255,0.2);border-radius:10px;padding:12px 14px">
+      <div style="font-size:22px;flex-shrink:0">2️⃣</div>
+      <div>
+        <div style="font-size:13px;font-weight:900;color:#fff">看看教練簡介</div>
+        <div style="font-size:12px;color:var(--muted)">找到風格適合你的教練</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:rgba(0,207,255,0.08);border:1px solid rgba(0,207,255,0.2);border-radius:10px;padding:12px 14px">
+      <div style="font-size:22px;flex-shrink:0">3️⃣</div>
+      <div>
+        <div style="font-size:13px;font-weight:900;color:#fff">點 IG 直接聯繫</div>
+        <div style="font-size:12px;color:var(--muted)">傳訊息給教練，約定體驗課時間</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 篩選標籤 -->
+<!-- 篩選下拉 -->
+<div style="padding:0 20px 20px">
+  <select id="filter-select" onchange="filterCoach(this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:700;font-family:'Noto Sans TC',sans-serif;padding:10px 14px;border-radius:10px;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%237a95b5%22 d=%22M6 8L1 3h10z%22/></svg>');background-repeat:no-repeat;background-position:right 14px center">
+    <option value="all">全部專長</option>
+    <option value="增肌">增肌</option>
+    <option value="減脂">減脂</option>
+    <option value="體能訓練">體能訓練</option>
+    <option value="運動傷害">運動傷害</option>
+    <option value="女性專屬">女性專屬</option>
+    <option value="動作矯正">動作矯正</option>
+    <option value="體態雕塑">體態雕塑</option>
+    <option value="運動表現">運動表現</option>
+    <option value="核心訓練">核心訓練</option>
+    <option value="新手友善">新手友善</option>
+    <option value="多功能訓練">多功能訓練</option>
+  </select>
+</div>
+
+<!-- 教練列表 -->
+<div class="coaches" id="coach-list"></div>
+
+<div class="divider"></div>
+
+<div class="cta-block">
+  <div class="cta-title">不知道選誰？</div>
+  <div class="cta-sub">告訴我們你的需求，我們幫你媒合最適合的教練。</div>
+  <a href="https://lin.ee/Jshdti6" class="cta-btn">到 LINE@ 詢問 →</a>
+</div>
+
+<button id="topBtn" style="position:fixed;bottom:28px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(30,144,255,0.4);z-index:999">↑</button>
+
+<script>
+const coaches = [
+  {
+    name:'薇薇 Vivi',
+    desc:'溫柔鼓勵的方式讓所有人愛上訓練，並且達成自己想要的樣子。',
+    tags:[{text:'運動表現',cls:'tag-yellow'},{text:'新手友善',cls:'tag-green'},{text:'多功能訓練',cls:'tag-cyan'}],
+    ig:'https://www.instagram.com/vivi_lu_0314',
+    emoji:'🌟'
+  },
+  {
+    name:'A.D',
+    desc:'為青壯年與銀髮族量身打造的體適能和功能性訓練，全面提升身體素質。',
+    tags:[{text:'減脂',cls:'tag-orange'},{text:'體能訓練',cls:'tag-orange'},{text:'多功能訓練',cls:'tag-cyan'}],
+    ig:'https://www.instagram.com/a.d.wang',
+    emoji:'⚡'
+  },
+  {
+    name:'Jimmy',
+    desc:'從有氧老師轉型為自由教練，並同步在大學兼任講師，擅長結合實戰經驗與學術理論進行教學。',
+    tags:[{text:'體能訓練',cls:'tag-orange'},{text:'多功能訓練',cls:'tag-cyan'},{text:'新手友善',cls:'tag-green'}],
+    ig:'https://www.instagram.com/_jimmy_fit_',
+    emoji:'🏃'
+  },
+  {
+    name:'Elva',
+    desc:'幫學員建立基礎做全身性的訓練達到自己的目標，會以重量訓練動作調整為主。',
+    tags:[{text:'減脂',cls:'tag-orange'},{text:'體態雕塑',cls:'tag-cyan'},{text:'女性專屬',cls:'tag-purple'}],
+    ig:'https://www.instagram.com/z66995512',
+    emoji:'💪'
+  },
+  {
+    name:'建龍',
+    desc:'肌力與體能訓練的專家，曾任秀朗泳訓體能教練，怪獸訓練體系。',
+    tags:[{text:'體能訓練',cls:'tag-orange'},{text:'運動表現',cls:'tag-yellow'},{text:'動作矯正',cls:'tag-cyan'}],
+    ig:'https://www.instagram.com/andrew_and_ban',
+    emoji:'🏋️'
+  },
+  {
+    name:'Kitty',
+    desc:'提供客製化訓練課表，主要客群為女性、媽媽、孕婦，科學方法＋溫暖引導，讓訓練更有效也更有動力。',
+    tags:[{text:'減脂',cls:'tag-orange'},{text:'多功能訓練',cls:'tag-cyan'},{text:'體態雕塑',cls:'tag-cyan'}],
+    ig:'https://www.instagram.com/k_itty0920',
+    emoji:'🌸'
+  },
+];
+
+let currentFilter = 'all';
+
+// 每次開啟隨機排序
+coaches.sort(() => Math.random() - 0.5);
+
+function renderCoaches(filter){
+  const list = document.getElementById('coach-list');
+  const filtered = filter==='all' ? coaches : coaches.filter(c=>c.tags.some(t=>t.text===filter));
+  
+  if(filtered.length===0){
+    list.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:13px">目前沒有符合條件的教練</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(c=>`
+    <div class="coach-card">
+      <div class="coach-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:28px;flex-shrink:0">${c.emoji}</div>
+          <div class="coach-name">${c.name}</div>
+        </div>
+        <a href="${c.ig}" target="_blank" class="coach-ig">📷 點此 IG 聯繫教練</a>
+      </div>
+      <div class="coach-desc">${c.desc}</div>
+      <div class="coach-tags">
+          ${c.tags.map(t=>`<span class="coach-tag ${t.cls}">${t.text}</span>`).join('')}
+        </div>
+    </div>
+  `).join('');
+}
+
+function filterCoach(tag){
+  currentFilter = tag;
+  renderCoaches(tag);
+}
+
+renderCoaches('all');
+
+const topBtn=document.getElementById('topBtn');
+window.addEventListener('scroll',()=>{topBtn.style.opacity=window.scrollY>300?'1':'0';topBtn.style.pointerEvents=window.scrollY>300?'auto':'none'});
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>
