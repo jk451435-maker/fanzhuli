@@ -74,7 +74,7 @@ body{background:linear-gradient(180deg,#080c12 0%,#060a10 100%);color:var(--text
 <div class="hero">
   <div class="hero-eyebrow">反作用力訓練空間</div>
   <div class="hero-title">自由<span>教練</span></div>
-  <div class="hero-sub">場館內共有 <strong style="color:#00CFFF" id="coach-count">8 位</strong> 專業自由教練，涵蓋 <strong style="color:#00CFFF" id="tag-count"></strong> 種專長，找到適合你的教練直接預約！</div>
+  <div class="hero-sub">場館內共有 <strong style="color:#00CFFF" id="coach-count">9 位</strong> 專業自由教練，涵蓋 <strong style="color:#00CFFF" id="tag-count"></strong> 種專長，找到適合你的教練直接預約！</div>
 
   <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
     <div style="display:flex;align-items:center;gap:12px;background:rgba(30,144,255,0.08);border:1px solid rgba(30,144,255,0.2);border-radius:10px;padding:12px 14px">
@@ -172,6 +172,14 @@ const coaches = [
     gender:'male'
   },
   {
+    name:'Sunny',
+    desc:'身體的改變需要時間的累積，我負責專業，你負責感受。',
+    tags:[{text:'增肌',cls:'tag-blue'},{text:'體態雕塑',cls:'tag-cyan'},{text:'新手友善',cls:'tag-green'}],
+    ig:'https://www.instagram.com/sunnyboyy_12',
+    emoji:'☀️',
+    gender:'male'
+  },
+  {
     name:'KAI',
     desc:'健身工廠13年老將，從主管再到訓練教官，親手把學員變選手、業界教練。全方位陪伴你戰勝短期挫折，培養長期健身人生。',
     tags:[{text:'體態雕塑',cls:'tag-cyan'},{text:'運動傷害',cls:'tag-green'},{text:'增肌',cls:'tag-blue'}],
@@ -221,41 +229,66 @@ function renderCoaches(filter, gender, page){
   const start = (page-1) * perPage;
   const pageCoaches = filtered.slice(start, start + perPage);
 
-  list.innerHTML = pageCoaches.map((c, i)=>`
-    <div class="coach-card">
-      <div class="coach-header">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="font-size:26px;flex-shrink:0">${c.emoji}</div>
-          <div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <div class="coach-name">${c.name}</div>
-              <span style="font-size:10px;font-weight:900;padding:2px 7px;border-radius:4px;${c.gender==='female'?'background:rgba(255,105,180,0.15);color:#ff69b4':'background:rgba(30,144,255,0.12);color:#1E90FF'}">${c.gender==='female'?'女':'男'}</span>
-            </div>
-            <div class="coach-tags" style="margin-top:4px">
-              ${c.tags.map(t=>`<span class="coach-tag ${t.cls}">${t.text}</span>`).join('')}
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
-          <span style="font-size:10px;font-weight:900;color:var(--muted);background:var(--border);padding:2px 8px;border-radius:99px">#${start+i+1}</span>
-          <a href="${c.ig}" target="_blank" class="coach-ig" style="font-size:11px;padding:5px 10px">📷 點此 IG 聯繫教練</a>
-        </div>
-      </div>
-      <div class="coach-desc" style="margin-top:8px">${c.desc}</div>
-    </div>
-  `).join('');
+  list.innerHTML = '';
+  pageCoaches.forEach((c, i) => {
+    const isFemale = c.gender === 'female';
+    const genderBg = isFemale ? 'rgba(255,105,180,0.15)' : 'rgba(30,144,255,0.12)';
+    const genderColor = isFemale ? '#ff69b4' : '#1E90FF';
+    const genderText = isFemale ? '女' : '男';
+    const card = document.createElement('div');
+    card.className = 'coach-card';
+    card.innerHTML =
+      '<div class="coach-header">' +
+        '<div style="display:flex;align-items:center;gap:10px">' +
+          '<div style="font-size:26px;flex-shrink:0">' + c.emoji + '</div>' +
+          '<div>' +
+            '<div style="display:flex;align-items:center;gap:6px">' +
+              '<div class="coach-name">' + c.name + '</div>' +
+              '<span style="font-size:10px;font-weight:900;padding:2px 7px;border-radius:4px;background:' + genderBg + ';color:' + genderColor + '">' + genderText + '</span>' +
+            '</div>' +
+            '<div class="coach-tags" style="margin-top:4px">' +
+              c.tags.map(t => '<span class="coach-tag ' + t.cls + '">' + t.text + '</span>').join('') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">' +
+          '<span style="font-size:10px;font-weight:900;color:var(--muted);background:var(--border);padding:2px 8px;border-radius:99px">#' + (start+i+1) + '</span>' +
+          '<a href="' + c.ig + '" target="_blank" class="coach-ig" style="font-size:11px;padding:5px 10px">📷 點此 IG 聯繫教練</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="coach-desc" style="margin-top:8px">' + c.desc + '</div>';
+    list.appendChild(card);
+  });
 
   const pagination = document.getElementById('pagination');
   if(totalPages <= 1){ pagination.innerHTML=''; return; }
-  const prevDisabled = page===1;
-  const nextDisabled = page===totalPages;
-  pagination.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0">
-      <button onclick="changePage(${page-1})" ${prevDisabled?'disabled':''} style="background:${prevDisabled?'var(--border)':'var(--blue)'};color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:900;font-family:'Noto Sans TC',sans-serif;cursor:pointer;opacity:${prevDisabled?'0.4':'1'}">← 上一頁</button>
-      <span style="font-size:13px;color:var(--muted);font-weight:700">${page} / ${totalPages}</span>
-      <button onclick="changePage(${page+1})" ${nextDisabled?'disabled':''} style="background:${nextDisabled?'var(--border)':'var(--blue)'};color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:900;font-family:'Noto Sans TC',sans-serif;cursor:pointer;opacity:${nextDisabled?'0.4':'1'}">下一頁 →</button>
-    </div>
-  `;
+  const prevBg = page===1 ? 'rgba(255,255,255,0.1)' : '#1E90FF';
+  const nextBg = page===totalPages ? 'rgba(255,255,255,0.1)' : '#1E90FF';
+  const prevOp = page===1 ? '0.4' : '1';
+  const nextOp = page===totalPages ? '0.4' : '1';
+  const prevAttr = page===1 ? 'disabled' : '';
+  const nextAttr = page===totalPages ? 'disabled' : '';
+  const btnStyle = 'color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:900;cursor:pointer;';
+  const p = document.createElement('div');
+  p.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0';
+  const prevBtn = document.createElement('button');
+  prevBtn.textContent = '← 上一頁';
+  prevBtn.style.cssText = btnStyle + 'background:' + prevBg + ';opacity:' + prevOp;
+  if(page===1) prevBtn.disabled = true;
+  prevBtn.onclick = function(){ changePage(page-1); };
+  const span = document.createElement('span');
+  span.textContent = page + ' / ' + totalPages;
+  span.style.cssText = 'font-size:13px;color:#7a95b5;font-weight:700';
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = '下一頁 →';
+  nextBtn.style.cssText = btnStyle + 'background:' + nextBg + ';opacity:' + nextOp;
+  if(page===totalPages) nextBtn.disabled = true;
+  nextBtn.onclick = function(){ changePage(page+1); };
+  p.appendChild(prevBtn);
+  p.appendChild(span);
+  p.appendChild(nextBtn);
+  pagination.innerHTML = '';
+  pagination.appendChild(p);
 }
 
 function changePage(page){
